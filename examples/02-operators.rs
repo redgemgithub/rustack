@@ -2,9 +2,7 @@ fn main() {
   for line in std::io::stdin().lines() {
     let mut stack = vec![];
     if let Ok(line) = line {
-      let words: Vec<_> = line.split(" ").collect();
-
-      for word in words {
+      for word in line.split(" ").collect::<Vec<_>>() {
         if let Ok(parsed) = word.parse::<i32>() {
           stack.push(parsed);
         } else {
@@ -17,7 +15,6 @@ fn main() {
           }
         }
       }
-
       println!("stack: {stack:?}");
     }
   }
