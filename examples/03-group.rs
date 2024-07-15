@@ -1,11 +1,11 @@
 #[derive(Debug, PartialEq, Eq)]
-enum Value<'src> {
+enum Value<'a> {
   Num(i32),
-  Op(&'src str),
-  Block(Vec<Value<'src>>),
+  Op(&'a str),
+  Block(Vec<Value<'a>>),
 }
 
-impl<'src> Value<'src> {
+impl<'a> Value<'a> {
   fn as_num(&self) -> i32 {
     match self {
       Self::Num(val) => *val,
@@ -22,8 +22,8 @@ fn main() {
 
 fn parse<'a>(line: &'a str) -> Vec<Value> {
   let mut stack = vec![];
-  let input: Vec<_> = line.split(" ").collect();
-  let mut words = &input[..];
+  let input = line.split(" ").collect::<Vec<_>>();
+  let mut words = input.as_slice();
 
   while let Some((&word, mut rest)) = words.split_first() {
     if word.is_empty() {
@@ -52,9 +52,7 @@ fn parse<'a>(line: &'a str) -> Vec<Value> {
   stack
 }
 
-fn parse_block<'src, 'a>(
-  input: &'a [&'src str],
-) -> (Value<'src>, &'a [&'src str]) {
+fn parse_block<'a, 'b>(input: &'b [&'a str]) -> (Value<'a>, &'b [&'a str]) {
   let mut tokens = vec![];
   let mut words = input;
 
